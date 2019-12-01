@@ -1,0 +1,224 @@
+﻿@model IEnumerable<WebApplication1.Models.M6_Model>
+
+@{
+    ViewBag.Title = "m6";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<SelectListItem> yrSelectItemList = new List<SelectListItem>();
+
+    yrSelectItemList.AddRange(new[]{
+new SelectListItem() {Text = "2019", Value = "2019", Selected = false},
+new SelectListItem() {Text = "2018", Value = "2018", Selected = false},
+new SelectListItem() {Text = "2017", Value = "2017", Selected = false},
+new SelectListItem() {Text = "2016", Value = "2016", Selected = false},
+new SelectListItem() {Text = "2015", Value = "2015", Selected = false},
+new SelectListItem() {Text = "2014", Value = "2014", Selected = false},
+new SelectListItem() {Text = "2013", Value = "2013", Selected = false},
+new SelectListItem() {Text = "2012", Value = "2012", Selected = false},
+new SelectListItem() {Text = "2011", Value = "2011", Selected = false},
+new SelectListItem() {Text = "2010", Value = "2010", Selected = false},
+new SelectListItem() {Text = "2009", Value = "2009", Selected = false},
+new SelectListItem() {Text = "2008", Value = "2008", Selected = false},
+new SelectListItem() {Text = "2007", Value = "2007", Selected = false},
+new SelectListItem() {Text = "2006", Value = "2006", Selected = false},
+new SelectListItem() {Text = "2005", Value = "2005", Selected = false},
+new SelectListItem() {Text = "2004", Value = "2004", Selected = false},
+new SelectListItem() {Text = "2003", Value = "2003", Selected = false},
+new SelectListItem() {Text = "2002", Value = "2002", Selected = false},
+new SelectListItem() {Text = "2001", Value = "2001", Selected = false},
+new SelectListItem() {Text = "2000", Value = "2000", Selected = false},
+new SelectListItem() {Text = "1999", Value = "1999", Selected = false}
+});
+}
+
+<script>
+    $(document).ready(function () {
+        $("#yrlist").change(function () {
+            var url = '/Home/m6?yr=' + $(this).val();
+            window.location.replace(url);
+        });
+
+    });
+</script>
+
+<h2>六合彩機器學習</h2>
+
+<p>
+    @Html.DropDownList("yrlist", yrSelectItemList, "Select Year", new { @class = "form-control" })
+</p>
+<div id="m6">
+    <div style="overflow-y:auto;height:50%;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        期號
+                    </th>
+                    <th>
+                        日期
+                    </th>
+                    <th>
+                        年干
+                    </th>
+                    <th>
+                        年支
+                    </th>
+                    <th>
+                        月干
+                    </th>
+                    <th>
+                        月支
+                    </th>
+                    <th>
+                        日干
+                    </th>
+                    <th>
+                        日支
+                    </th>
+                    <th>
+                        號碼1
+                    </th>
+                    <th>
+                        號碼2
+                    </th>
+                    <th>
+                        號碼3
+                    </th>
+                    <th>
+                        號碼4
+                    </th>
+                    <th>
+                        號碼5
+                    </th>
+                    <th>
+                        號碼6
+                    </th>
+                    <th>
+                        特別號碼
+                    </th>
+                    <th>
+                        備注
+                    </th>
+                    <th>
+                        號碼1顏色
+                    </th>
+                    <th>
+                        號碼2顏色
+                    </th>
+                    <th>
+                        號碼3顏色
+                    </th>
+                    <th>
+                        號碼4顏色
+                    </th>
+                    <th>
+                        號碼5顏色
+                    </th>
+                    <th>
+                        號碼6顏色
+                    </th>
+                    <th>
+                        特別號碼顏色
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.datetme)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Y1)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Y2)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.M1)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.M2)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.D1)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.D2)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.no1)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.no2)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.no3)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.no4)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.no5)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.no6)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.sno)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.remark)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.c1)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.c2)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.c3)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.c4)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.c5)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.c6)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.c7)
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="files">
+    <h2>六合彩機器學習</h2>&nbsp;
+    <p>命題 : 測試以抽獎日八字能否有效預測中獎號碼</p>
+    <p>Use 6 words out of 8 words (left out the words for hours) to predict</p>
+    <p>Use data from 2009 - 2019 , 80% for training and 20% for predict</p>
+    <p>Use 2-hidden dense layers with 150 neurons each , using RELU activation</p>
+    <p>Conclusion from the above simple setup :</p>
+    <p>The accuracy is low for brute -force taking consideration of just the 6-words alone  for picking 7 numbers without considering possibly some</p>
+    <p>time-series relation. See articles from http://tradealgo.blogspot.hk some previous research on Mark Six trends (under topic category "六合彩"</p>
+    <p>The mark six data provided here is from 1999 - 2019 and will continuously be updated by a monthly job. It also shows the color of each number drawn</p>
+
+
+
+    <a href="~/Content/Files/m6_8words(masked)_py.txt">Mark Six Machine Learning Source code on data from 2009-2019</a>
+    &nbsp;
+    <a href="~/Content/Files/m6_8words_keras_result.txt">Mark Six Machine Learning Result on data from 2009-2019</a>
+
+
+
+</div>

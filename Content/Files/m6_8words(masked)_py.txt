@@ -1,0 +1,64 @@
+
+
+import numpy as np
+import pandas as pd
+import pyodbc
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
+
+np.set_printoptions(threshold=10000)
+sql_conn = pyodbc.connect('Driver={ODBC Driver 13 for SQL Server};Server=xxxx;Database=adb;Uid=kkk;Pwd=******;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30') 
+query = "SELECT [no1],[no2],[no3],[no4],[no5],[no6],[sno],[Y1],[Y2],[M1],[M2],[D1],[D2] FROM [dbo].[m6_model] where left([datetme],4)>'2009' order by [datetme]"
+df = pd.read_sql(query, sql_conn)
+dfcopy=df
+bat=30
+train_X = df.drop(columns=['no1','no2','no3','no4','no5','no6','sno'],axis=1)
+
+train_Y =dfcopy.drop(columns=['Y1','Y2','M1','M2','D1','D2'],axis=1)
+r=train_Y
+print(train_X.head(3))
+print(train_Y.head(3))
+xrange=['甲','乙','丙','丁','戊','己','庚','辛','壬','癸','子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥']
+di = dict(zip(xrange,np.arange(len(xrange))))
+#print(di)
+train_X=np.vectorize(di.get)(train_X)
+
+train_X = keras.utils.to_categorical(train_X, num_classes=23)
+
+train_Y = train_Y.astype(int)
+train_Y = keras.utils.to_categorical(train_Y, num_classes=50)
+train_X = train_X.reshape(len(train_X),-1)
+train_Y = train_Y.reshape(len(train_Y),-1)
+#create model
+model = Sequential()
+
+#get number of columns in training data
+in_cols = train_X.shape[1]
+
+out_cols = train_Y.shape[1]
+
+#add model layers
+model.add(Dense(units=150, activation='relu', input_dim=in_cols))
+model.add(Dense(units=150, activation='relu'))
+model.add(Dense(out_cols,activation='softmax'))
+model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+
+
+from keras.callbacks import EarlyStopping
+
+early_stopping_monitor = EarlyStopping(patience=3)
+#train model
+model.fit(train_X, train_Y, validation_split=0.2, epochs=30, batch_size=bat, callbacks=[early_stopping_monitor])
+
+model.evaluate(train_X, train_Y, batch_size=bat)
+
+classes=model.predict(train_X, batch_size=bat)
+
+
+classes=classes.reshape(-1,50)
+
+a=np.argmax(classes, axis=1)
+a=a.reshape(-1,7)
+print(a)
+print(r)

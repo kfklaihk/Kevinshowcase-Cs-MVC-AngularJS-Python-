@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <div style="overflow-y:auto;height:500px">
+        <h1>Kevin 's Project Showcase </h1>
+        <p>Interested in Hands on Programming practition of RAD, ETL, Automation, Data Science , Quantitative Financial Analysis, Trading Strategy Evaluations. </p>
+        <h2>IT Skill Sets Summary </h2>
+        <p>Generic Programming Language : C# , Javascript , Java, Ruby, Python, VBA,VB6, MT4 </p>
+        <p>Database Programming Language : T-SQL, PL/SQL, XML</p>
+        <p>Web Framework : ASP.NET C#(Win Form/Web Form/ MVC) ,JQuery/Node.js/Angular JS , Servlet/JSP, Struts 2 , Spring MVC, Ruby on Rails, Python Flask</p>
+        <p>DAO Framework :Entity Framework , Spring JPA, Hibernate, LINQ</p>
+        <p>Web Scraping Automation : Selenium , Phantomjs, Beautiful Soup, Cheerio</p>
+        <p>Data Science/Business Intelligence : SSIS/SSRS/SSAS/Power BI/Excel, DAX , Python (Numpy, Pandas), R ,  @@Risk, Talend</p>
+        <p>Artificial Intelligence : Machine Learning(Tensorflow/Keras)</p>
+        <p>Scripting/Automation : Bash Script , VBScript, Powershell , Crtl-M ,Windows Command Batch, SQL Agent Job, Google App Script</p>
+        <p>Database : SQL Server ,Oracle , MySQL, Access, MongoDB ,Postgresql</p>
+        <p>Cloud Platform : Azure ,Heroku </p>
+        <p>DataWarehouse : TeraData ,Hadoop </p>
+        <p>System Administration : SQL Server ,Oracle , MySQL, Access , IIS Log, Security patching</p>
+        <p>ERP :  Microsoft Dynamics 2016</p>
+        <p>Financial Platforms :  Bloomberg API, Reuters Xtra </p>
+        <p>Trading Applications API:  MetaTrader, MetaStock, Interactive Brokers TWS , SPTrader </p>
+        <p>Test Automation:  Visual Studio Unit Test, JUnit , Selenium </p>
+        <p>Development Tools:  Visual Studio, Eclipse, Runkit, JsFiddle, Repl.it, Anaconda, R-studio, SSMS, SQL Plus, Toad </p>
+        <p>Source Code Control:  Team Foundation , Github </p>
+        <p>Build Automation: Maven , Gradle</p>
+        <h2>Financial Skill Sets Summary </h2>
+        <p>CFA Level 3 Passed</p>
+        <p>HKAS QP Modules Passed</p>
+        <p>Banking/Brokerage House/Private Fund House/MNC/Government Financial IT Projects Development /Maintenance Experience</p>
+        <p>Conducted online courses on Excel VBA/C#/MT4 training on Financial Big Data Scraping ,  Monte Carlo Simulation ,Analysis, Backtesting , automated trading.</p>
+        <p>Course related Finance Blog http://tradealgo.blogspot.hk and related youtube channel</p>
+        <p>Financial Domain Experiences : (i) HKMA Regulatory Reporting (ii) Retail Chain Shops/Products Profit Margin/Costs Reporting/Forecasting (iii)Brokerage House Customer Margin/Financial Positions/Billing ad hoc data extraction analysis  </p>
+        <p>Brokerage House Trading Platform operation support / maintenance /business analysis / value-added plugin development</p>
+        <p>Private Fund House/Family Office Cash Liquidity and Asset Positions Data Warehouse Setup, ETL ,Reporting for Investment Portfolio Mandate Compliance Monitoring, Management Reporting, Ad hoc analysis tools for fund managers and analysts , middle office fund accounting reconciliation</p>
+        <p>Financial Audit preparation</p>
+        <p>MNC Retail Chain ERP (Microsoft AX , Oracle, Sql Server) Operational/Fiancial Data Modelling , Report Query Maintenance and Tuning, ETL, Data Visualization</p>
+    </div>
+  </div>
+
+
+    <div class="row">
+        <div style="overflow-y:auto;height:500px;font-size:12px">
+            <h2>About This Project</h2>
+            <p>
+                This is an ASP.NET MVC Web Financial demo Application on Azure. It is a simple stock paper trading game and trading risk/return performance evaluator. The website allows user to register via their email or via Google login.
+                On successful registration the new user is given HKD10,000,000 to invest in HK stocks,深滬通 and US stocks from list pickup. The user can long or short , and can place market or limit order. For short sell, it is made via 借貨沽空(SBL)
+                and additional 50% cash margin is kept. (Can refer to example in http://www1.poems.com.hk/zh-hk/product-and-service/sbl/process/) Near Real Time Quote (around 1-min delay)  is get via popular financial website through web scraping as
+                free real time api is not available. The stock name and price are returned from successful action. To get the quote, first select the correct market in the Exchange dropdown list , then select the "stock code" input box and enter the stock code.
+                The stock code follows the yahoo finance naming standard , e.g. 0001.HK for CK Hutchison. Actually during typing the available stock code will be hinted in the dropdown list at the input box via the Autocomplete feature and you can select from
+                the list.After that , press "Refresh" button and wait around 1-minute for the quote.The time for last successful refresh is logged in area under the "Refresh" button.
+            </p><br />
+            <p>
+                To place a market order , after getting the market quote from the above step, fill in the number of shares to place, select the right currency. The exchange rate is automatically filled in. For USD, it is fixed at 7.8 HKD. For RMB, it is got automatically
+                via some free currency api realtime and thus can vary. You then select Buy/Sell , select Market and click "Place Order" button and this will fire a market order. If some fields are missing , e.g. No. of shares , the website will alert you to fill in.
+
+                The market order is then checked to see if it falls within trading hours. It is then checked to see if the available free cash is enough to fulfill the order. For short sell, it is assumed enough stocks can always be borrowed and additional 50% margin kept.
+                No transaction fee/interest is charged in this simple demo. The order is either entirely fulfilled or rejected. The last order status is shown in blue text at the bottom of the order section , and the details of the order is also shown with status under the remark column
+
+                Limit order can also be placed in similar fashion as market order. The difference from market order is that the limit order is not cleared at the day it is placed (too costly for this simple demo to monitor !) and it could be cleared from T+1 onwards. Another difference is
+                that limit order can be placed anytime. When placed , it is put in the Pending Order section. When it is fulfilled at a certain day, it will be shown in the market order section for that day , shown "Complete market order to buy/sell stock" in the remark and "000000" in the time
+                column. The remark of the Pending order will be updated to show the fulfillment date at the order placing date.
+
+                Once an order is fulfilled , the freecash, margin and stock holding positions will be updated. the exchange rate, close price and equity columns are usually blank for today. They will normally be filled up after market close when an azure node.js server daily job is run at around 930AM the other day
+                to perform the following operations : 1. Fill up closing prices from yahoo finance and exchange rate  2. Clear the limit order backlog 3. Mark to market and adjust free cash, margin and cash dividend 4. Cleanse null prices 5. Calculate several portfolio evaluations and compare with Hang Seng Index(HSI) return
+                <b>
+                    The status of the daily job run can be traced in the site https://stk-server-daily-job.azurewebsites.net/ via the logged output and the last successful completion time.
+                </b>
+                The stock holdings , free cash and margin , and both market and limit orders placed for each day can be traced via the date picker when click the Date Inputbox.
+            </p><br />
+            <p>
+                At the  "Portfolio Risk/Return" page, 股票組合價值(假設全部最高價) means the hypothetical valuation when all stocks are at the lowest price, assuming 100% correlation in
+                catastrophic market conditions. Simlar for 股票組合價值(假設全部最低價). The fluctuation should be small for steady performance. The return from HSI for the same period can be
+                benchmarked.
+
+                The site also has a page for stock analysts recommendations. It 's developed using Angular JS and Google Chart techniques.You can select by either analyst name or stock code to view the related recommendations. There is a chart button
+                beside the stock codes and on clicking , the related stock candlestick chart will be shown below. Thus the stock trend can be tracked to review analyst performance. Currently only  a few analyst on Hong Kong stocks are captured but can
+                easily extendable to other analysts and markets.
+
+                As the data sources (both real time ) are not that stable and subject to change all the time , there could sometimes be glitches  or not working. Owing to limited development time, the site still has room for improvement
+                <b>
+                    There is also a page for big data analysis and machine learning. Currently it is hosting mark six processed big data from 1999 onwards and will get updated monthly via system job. You
+                    are welcome to download for your own analysis. There is currently a machine learning exercise using Keras to test the proposition "測試以抽獎日八字能否有效預測中獎號碼" using data from 2009-2019. The
+                    sample code and analysis result is attached for download. Of course to get complete data training , it should takes at least 60 years of sample for completeness!
+                </b><br>
+                    <b>
+                        There is also a Stock Notes Scrapbook (股票材料記事本) written in Ruby in  Rails for rapid application development (RAD). It is hosted in Windows Azure Linux Web App using Postgres database. The Rails Active Storage gem is used to manage material files upload to
+                        Azure Blob Storage as attachments. Pdf , pictures and mp4 videos can be uploaded and saved  , and downloaded and previewed later.Sentiment analysis can be done on the materials collected. Details go to "我的其他Project連接" page
+
+                    </b>
+            </p><br />
+        </div>
+        <div style="overflow-y:auto;height:500px">
+            <p> Screenshot 1 Client Trading Screen 1</p>
+            <img src="~/Content/images/Screenshot 2019-02-18 23.22.32.png" />
+            <p> Screenshot 2 Client Trading Screen 2</p>
+            <img src="~/Content/images/Screenshot 2019-02-18 23.25.01.png" />
+            <p> Screenshot 3 Client Portfolio Scenario Screen 1</p>
+            <img src="~/Content/images/Screenshot 2019-02-18 23.27.05.png" />
+            <p> Screenshot 4 Server Daily Job Dump Screen 1</p>
+            <img src="~/Content/images/Screenshot 2019-02-18 23.33.57.png" />
+            <p> Screenshot 5 Stock Analyst Recommendation Evaluation Screen 1</p>
+            <img src="~/Content/images/Screenshot 2019-02-24 00.18.01.png" />
+            <p> Screenshot 6 Mark Six Big Data Machine Learning Screen</p>
+            <img src="~/Content/images/Screenshot 2019-03-03 23.38.41.png" />
+            <p>Screenshot 6 Mark Six Big Data Machine Learning Result Screen</p>
+            <img src="~/Content/images/Keras_result.png" />
+        </div>
+    </div>

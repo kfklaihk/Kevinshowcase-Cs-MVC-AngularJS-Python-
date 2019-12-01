@@ -1,0 +1,129 @@
+﻿@{
+    ViewBag.Title = "Project highlights";
+}
+<div class="jumbotron">
+    <h1>Other Project highlights</h1>
+    <b>
+        1.
+        <a href="http://tradealgo.blogspot.hk">Finanial IT Programming and Data Analysis Blog</a>
+        <p>
+            Mainly VBA, C# , MT4 , finance api and Metastock application on program trading automation , web scraping , financial data cleansing , integration and regression,
+            Stock analyst recommendation quantitative evaluation, monte carlo simulaton ...
+        </p>
+    </b>
+
+    <br />
+
+    <p>
+        <b>
+            2.
+            <a href="http://stkscrapbook.azurewebsites.net/">Stock Notes Scrapbook (股票材料記事本)</a>
+            <br>
+            This is an app written in Ruby in  Rails for rapid application development (RAD). It is hosted in Windows Azure Linux Web App using Postgres database. The Rails Active Storage gem is used to manage material files upload to
+            Azure Blob Storage as attachments. Pdf , pictures and mp4 videos can be uploaded and saved , and downloaded and previewed later .Sentiment analysis can be done on the materials collected. This helps investor to track useful stock materials.
+            <br>
+            Summary screenshots on the app operations are shown below
+
+        </b>
+
+
+    </p>
+    <br />
+    <div style="overflow-y:auto;height:400px">
+        <p> Screenshot 1 Login Screen </p>
+        <img src="~/Content/images/s1.png" />
+        <p> Screenshot 2 New User Register Screen </p>
+        <img src="~/Content/images/s2.png" />
+        <p> Screenshot 3 User Logged In Screen (No Notebook Created Yet)</p>
+        <img src="~/Content/images/s3.png" />
+        <p> Screenshot 4 New Notebook Screen </p>
+        <img src="~/Content/images/s4.png" />
+        <p> Screenshot 5 Click on New Notebook Screen link to check stock code is valid or not using Yahoo Finanace. Stock Code in Yahoo Stock Code Format </p>
+        <img src="~/Content/images/s5.png" />
+        <p> Screenshot 6 Notebook details input via textbox , input mask, dropdown list , file dialog box .... </p>
+        <img src="~/Content/images/s6.png" />
+        <p> Screenshot 7 A new notebook created for the current user for stock code 0001.HK , showing download link and show/update/delete options </p>
+        <img src="~/Content/images/s7.png" />
+        <p> Screenshot 8 Show Notebook Details Screen. Click download link to download the material attachment.click preview to preview the material </p>
+        <img src="~/Content/images/s8.png" />
+        <p> Screenshot 9 Click download link </p>
+        <img src="~/Content/images/s9.png" />
+        <p> Screenshot 10 Preview material </p>
+        <img src="~/Content/images/s10.png" />
+    </div>
+    <br />
+    <p>
+        <b>
+            3.
+            <a href="https://logintestac.azurewebsites.net/">Document Approval Workflow Graphical Design Interface</a>
+            <br>
+            This is an app written in ASP.Net 5 MVC to let managers to design workflow stages and action buttons for each stage. They can assign the next stage for each button. When mouseover the stage, the stage and
+            all buttons pointing to that stage as next stage will be shown green. When mousover the action button, the button and the next stage will be shown yellow. They can drag and drop
+            buttons and stage rows. They can delete rows and buttons by drag and drop to trash bin. They can fill in details for each stage and buttons with validation prompts. After satisfying with the design
+            They can save the design into database tables. Next time they can load back the workflow design from database , or create another workflow based on this saved desgin as template. The design can be exported
+            as csv to import to other workflow automation engines.
+
+            Webix UI javascript libraries are used for animation. It is hosted in Windows Azure.
+            Summary screenshots on the app operations are shown below
+
+        </b>
+
+
+    </p>
+    <br />
+    <div style="overflow-y:auto;height:400px" ">
+        <p> Screenshot 1 Index Screen </p>
+        <img src="~/Content/images/Screenshot 2019-11-21 22.46.31.png" />
+        <p> Screenshot 2 Create new workflow Test1 from previous templates </p>
+        <img src="~/Content/images/Screenshot 2019-11-21 22.57.52.png" />
+        <p> Screenshot 3 Template loaded</p>
+        <img src="~/Content/images/Screenshot 2019-11-21 23.00.09.png" />
+        <p> Screenshot 4 Stage and buttons with that stage as next stage (Green)</p>
+
+        <img src="~/Content/images/Screenshot 2019-11-21 23.01.10.png" />
+        <p> Screenshot 5 Button and the stage as next stage (Yellow) </p>
+
+        <img src="~/Content/images/Screenshot 2019-11-21 23.02.24.png" />
+        <p> Screenshot 6 Stage and the action buttons for that stage are swapped </p>
+
+        <img src="~/Content/images/Screenshot 2019-11-21 23.03.51.png" />
+        <p> Screenshot 7 Stage and button details view for the modified design shown for verification </p>
+
+        <img src="~/Content/images/Screenshot 2019-11-21 23.04.55.png" />
+        <p> Screenshot 8 Workflow exported as csv </p>
+
+        <img src="~/Content/images/export_csv.png" />
+
+    </div>
+    <br />
+    <p>
+        <b>
+            4.
+            <a href="https://metrofinanceanalyst.azurewebsites.net/">Metrofinance Radio I-Bank Stock Reports Since 2010(新城財經台大行報告)</a>
+            <br>
+            This is an app written in Java Spring Boot MVC and Jquery and is deployed to Azure Linux platform.The I-bank stock reports are retrieved from the metro finance radio website http://www.metroradio.com.hk/MetroFinance/ResearchTeam/ResearchReportsDetail.aspx
+            periodically via node.js script into Azure Postgresql database. Data cleansing is necessary to raise the quality of web data captured. The user can search the commentaries either
+            by stock name or by brokerage house name from the dropdown lists. When a stock is picked , the price and technical information of that stock from tradingview website is displayed to
+            help analysis.
+
+        </b>
+
+
+    </p>
+    <br />
+    <br />
+    <div style="overflow-y:auto;height:400px" ">
+        <p> Screenshot 1 Index Screen </p>
+
+        <img src="~/Content/images/metrof_1.png" />
+        <p> Screenshot 2 Select a stock</p>
+
+        <img src="~/Content/images/metrof_2.png" />
+        <p> Screenshot 3 Select a Brokerage House</p>
+
+        <img src="~/Content/images/metrof_3.png" />
+        
+
+    </div>
+    <br />
+</div>

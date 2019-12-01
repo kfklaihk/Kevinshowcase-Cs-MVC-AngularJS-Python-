@@ -1,0 +1,391 @@
+﻿@model WebApplication1.ViewModels.ViewModel_1
+
+@{
+    ViewBag.Title = "portfolio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+    var hkstock;
+    var cnstock;
+    var usstock;
+
+
+    $(function () {
+
+        $("body").css("cursor", "default");
+
+        $("#datepicker").datepicker({ dateFormat: 'yymmdd' })
+          .change(function () {
+
+              /* Get the selected value of dropdownlist */
+              var datstring = $(this).val().toString();
+              /* var datstring = selectedID.getFullYear() + selectedID.getMonth() + selectedID.getDate();
+              */
+
+              /* Request the partial view with .get request. */
+              $.get('/Home/Portfolio_partial?datme=' + datstring, function (data) {
+
+                  /* data is the pure html returned from action method, load it to your page */
+                  $('#partialPlaceHolder').html(data);
+
+              });
+
+          });
+
+        $.get("/symbol_list/hk_stock.txt", function (data) {
+            hkstock = data.split('\n');
+            $("#stk_code").autocomplete({
+                source: hkstock
+            });
+        });
+
+
+        $.get("/symbol_list/cn_stock.txt", function (data) {
+            cnstock = data.split('\n');
+
+        });
+
+        $.get("/symbol_list/us_stock.txt", function (data) {
+            usstock = data.split('\n');
+
+        });
+
+        
+
+
+        $("#stk_code").focus(function () {
+            var xc = $("#xchange").val();
+            switch (xc) {
+                case "HK":
+                    $("#stk_code").autocomplete({
+                        source: hkstock
+                    });
+                    break;
+                case "CN":
+                    $("#stk_code").autocomplete({
+                        source: cnstock
+                    });
+                    break;
+                case "US":
+                    $("#stk_code").autocomplete({
+                        source: usstock
+                    });
+                    break;
+            }
+        });
+
+
+
+        $("#refrsh").click(function () {
+
+			$(this).prop('disabled', true);
+			$("body").css("cursor", "progress");
+            $("#stk_name").val("");
+            $("#stk_price").val("");
+            $("#last_update").html("");
+            var stkcode = $("#stk_code").val().toString();
+            var xchange = $("#xchange").val().toString();
+
+
+            /* Request the partial view with .get request. */
+            $.get('/Home/stkquote_partial?stkcode=' + stkcode + '&xchange=' + xchange, function (data) {
+
+                /* data is the pure html returned from action method, load it to your page */
+                $('#Stkquote_partial').html(data);
+                $("#refrsh").prop('disabled', false);
+				$("#last_update").html("Last updated on " + Date().toString());
+                $("body").css("cursor", "default");
+                //
+                $("#stk_code").focus(function () {
+                    var xc = $("#xchange").val();
+                    switch (xc) {
+                        case "HK":
+                            $("#stk_code").autocomplete({
+                                source: hkstock
+                            });
+                            break;
+                        case "CN":
+                            $("#stk_code").autocomplete({
+                                source: cnstock
+                            });
+                            break;
+                        case "US":
+                            $("#stk_code").autocomplete({
+                                source: usstock
+                            });
+                            break;
+                    }
+                });
+
+                //
+            });
+
+        });
+
+        $("#curr").change(function () {
+            var jsn;
+            var curr = $("#curr").val();
+            switch (curr) {
+                case "HKD":
+                    $("#xrate").val("1");
+                    break;
+                case "USD":
+                    $("#xrate").val("7.8");
+                    break;
+                case "RMB":
+
+
+                    $.getJSON('https://jsonp.afeld.me/?url=http%3A%2F%2Ffree.currencyconverterapi.com%2Fapi%2Fv5%2Fconvert%3Fq%3DCNY_HKD%26apiKey%3D696d69b1b462c3b0c41a%26compact%3Dy', function (data) {
+                        //    alert(data.results.CNY_HKD.val);
+                        $("#xrate").val(data.CNY_HKD.val);
+
+                    });
+
+                    break;
+            }
+        });
+
+
+        $("#orderform").validate({
+            submitHandler: function (form) {
+
+
+                var xchange = $("#xchange").val();
+                var otype = $("#otype").val();
+                var d = new Date();
+                var tme = d.toTimeString().split(' ')[0].replace(/:/g, "");
+                
+                if (otype == "mkt") {
+                    if ((d.getday()>0 && d.getDay()<6) && ((xchange == "HK" && ((tme >= "093000" && tme < "120000") || (tme >= "130000" && tme < "160000"))) ||
+                        (xchange == "CN" && ((tme >= "093000" && tme < "113000") || (tme >= "130000" && tme < "150000"))) ||
+                        (xchange == "US" && ((tme >= "213000" && tme < "240000") || (tme >= "000000" && tme < "040000"))))) {
+                        $("body").css("cursor", "progress");
+                        form.submit();
+                    }
+
+
+                    else {
+
+                        alert("Outside Trading Hours. Cannot Place Market Order");
+
+                    }
+                }
+                else {
+                    $("body").css("cursor", "progress");
+                    form.submit();
+                }
+            }
+        });
+    });
+ </script>
+<h2>portfolio</h2>
+
+<p>
+    User : @Model.CurrentUser
+</p>
+<p>
+    Date: <input type="text" id="datepicker" >
+</p>
+<div id="partialPlaceHolder" >
+    
+    <div id="Stk">
+        <div style="overflow-y:auto;">
+
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Stock Code</th>
+                        <th>Stock Name</th>
+                        <th>No. of Shares</th>
+                        <th>Market</th>
+                        <th>Exchange Rate</th>
+                        <th>Currency</th>
+                        <th>Close Price</th>
+                        <th>Equity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.StkHoldingModels)
+                    {
+                        var has_date = false;
+                        <tr>
+                            <td>@item.Stklist.stkcode</td>
+                            <td>@item.Stklist.name</td>
+                            <td>@item.shares</td>
+                            <td>@item.Stklist.market</td>
+                            @foreach (var item2 in item.Stklist.StkModels)
+                            {
+
+                                if (item2.datetme == (string)TempData["dt"])
+                                {
+                                    has_date = true;
+                                    <td>@item2.xrate</td>
+                                }
+
+
+                            }
+                            @if (has_date == false)
+                            {
+                                <td></td>}
+
+                            <td>@item.Stklist.currency</td>
+                            @foreach (var item2 in item.Stklist.StkModels)
+                            {
+                                if (item2.datetme == (string)TempData["dt"])
+                                {
+                                    <td>@item2.cprice</td>
+                                    <td>@((item2.cprice * item.shares * item2.xrate).ToString("c"))</td>
+                                }
+
+                            }
+                            @if (has_date == false)
+                            {
+                                <td></td>
+                                <td></td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="Cash">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Free Cash</th>
+                    <th>Margin</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CashHoldingModels)
+                {
+                    <tr>
+                        <td>@item.freecash</td>
+                        <td>@item.margin</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="tx">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Buy/Sell</th>
+                    <th>Stock Code</th>
+                    <th>Stock Name</th>
+                    <th>No. of Shares</th>
+                    <th>Currency</th>
+                    <th>Exchange Rate</th>
+                    <th>Execution Price</th>
+                    <th>Remark</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.txModels)
+                {
+                    <tr>
+                        <td>@item.datetme</td>
+                        <td>@item.hrmmtme</td>
+                        <td>@item.buysell</td>
+                        <td>@item.Stklist.stkcode</td>
+                        <td>@item.Stklist.name</td>
+                        <td>@item.shares</td>
+                        <td>@item.Stklist.currency</td>
+                        <td>@item.xrate</td>
+                        <td>@item.price</td>
+                        <td>@item.remark</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div id="pending_tx">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Buy/Sell</th>
+                    <th>Stock Code</th>
+                    <th>Stock Name</th>
+                    <th>No. of Shares</th>
+                    <th>Currency</th>
+
+                    <th>Order Price</th>
+                    <th>Remark</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Pending_txModels)
+                {
+                    <tr>
+                        <td>@item.datetme</td>
+                        <td>@item.hrmmtme</td>
+                        <td>@item.buysell</td>
+                        <td>@item.Stklist.stkcode</td>
+                        <td>@item.Stklist.name</td>
+                        <td>@item.shares</td>
+                        <td>@item.Stklist.currency</td>
+
+                        <td>@item.price</td>
+                        <td>@item.remark</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    </div>
+<div id="refresh_area">
+    <button id="refrsh">Refresh</button><div id="last_update"></div>
+    &nbsp;
+</div>
+<div id="quote">
+    <form id="orderform" name="orderform" action="/Home/Order"  method="post">
+        <p>
+            Exchange: <select id="xchange" name="xchange">
+                <option value="HK">HK</option>
+                <option value="CN">CN</option>
+                <option value="US">US</option>
+            </select>
+            &nbsp;
+                      <div id="Stkquote_partial">
+                          <div class="ui-widget">
+                              Stock Code: <input type="text" id="stk_code" name="stk_code" required>&nbsp;
+                              </div>
+                              Stock Name: <input type="text" id="stk_name" name="stk_name" required>&nbsp;
+                              Stock Price: <input type="text" id="stk_price" name="stk_price" min:0 required>&nbsp;
+                          </div>
+
+</p>
+        <p>
+            No. of Shares:<input type="text" id="shares" name="shares" required>&nbsp;
+            Currency:
+            <select id="curr" name="curr">
+                <option value="HKD">HKD</option>
+                <option value="RMB">RMB</option>
+                <option value="USD">USD</option>
+            </select>
+            Exchange Rate:<input type="text" id="xrate" name="xrate" value="1">&nbsp;
+
+            <select id="bs" name="bs">
+                <option value="Buy">Buy</option>
+                <option value="Sell">Sell</option>
+            </select>
+            <select id="otype" name="otype">
+                <option value="mkt">Market</option>
+                <option value="limit">Limit</option>
+            </select>
+            &nbsp;
+            <input type="submit"  value="Place Order" />
+        </p>
+    </form>
+</div>
+ @if (TempData["order_status"]!=null) {
+<div id="Order_Status" class="text-info">Last Status : @TempData["order_status"]</div>
+    }

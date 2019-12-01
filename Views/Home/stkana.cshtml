@@ -1,0 +1,126 @@
+﻿
+@{
+    ViewBag.Title = "stkana";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<div ng-app="myApp" ng-controller="get_details">
+
+    <p>Select from Stock</p>
+    &nbsp;
+
+    <select ng-model="selectedstk" ng-options="x for x in stks" ng-change="getdetails(1,selectedstk)"></select> &nbsp; &nbsp;
+    <p>Select from Analyst</p>
+    <select ng-model="selectedana" ng-options="x for x in anas" ng-change="getdetails(0,selectedana)"></select> &nbsp; &nbsp;
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>日期</th>
+                <th>分析員</th>
+                <th>股票號碼</th>
+                <th>股票名稱</th>
+                <th>建議</th>
+                <th>備注</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="x in details">
+                <td>{{x.datetme}}</td>
+                <td>{{x.name}}</td>
+                <td><button ng-click="drawchartwrap(x.stk)">Chart</button>{{x.stk}}</td>
+                <td>{{x.stkname}}</td>
+                <td>{{x.rec}}</td>
+                <td>{{x.rmk}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div id="chart_div" style="width: 900px; height: 500px;overflow-y:auto;"></div>
+</div>
+
+
+
+<script>
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+
+    var app = angular.module('myApp', []);
+    app.controller('get_details', function ($scope, $http) {
+        $http.get("/Home/initial_load_Rec")
+            .then(function (response) {
+                $scope.stks = response.data;
+            });
+
+        $http.get("/Home/initial_load_Ana")
+            .then(function (response) {
+                $scope.anas = response.data;
+            });
+
+        $scope.getdetails = function (typ, arg) {
+            var url = "/Home/load_recommend/?typ=" + typ.toString() + "&arg=" + arg;
+            $http.get(url)
+                .then(function (response) {
+                    $scope.details = response.data;
+                });
+        }
+
+        $scope.drawchartwrap = function (stkcode) {
+            var url = "/Home/load_chart/?stkcode=" + stkcode;
+            $http.get(url)
+                .then(function (response) {
+                    drawChart(json2array(response.data), stkcode);
+
+
+                });
+        }
+
+
+    });
+
+    function drawChart(cdata, stkcode) {
+        var data = google.visualization.arrayToDataTable(cdata, true);
+
+        var options = {
+            'title': stkcode,
+            legend : 'none'
+        };
+
+        var chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+    }
+
+    function json2array(json) {
+        var result = [];
+        var i;
+        var j, len;
+        var keys = Object.keys(json);
+        for (i = 0, len = keys.length; i < len; i++) {
+
+           
+
+                var datetme = json[keys[i]].datetme;
+                var S1 = json[keys[i]].S1;
+                var S2 = json[keys[i]].S2;
+                var S3 = json[keys[i]].S3;
+                var S4 = json[keys[i]].S4;
+
+                var c1 = [];
+                c1.push(datetme);
+                c1.push(S1);
+                c1.push(S2);
+                c1.push(S3);
+                c1.push(S4);
+
+                 result.push(c1);
+
+            
+        }
+        return result;
+    }
+
+</script>
+

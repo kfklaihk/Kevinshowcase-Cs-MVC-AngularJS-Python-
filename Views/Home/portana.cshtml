@@ -1,0 +1,73 @@
+﻿@model IEnumerable<WebApplication1.Models.MM_Model>
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Portfolio Risk/Return Analysis</h2>
+
+<div style="overflow-y:auto;">
+    <table class="table">
+        <tr>
+            <th>
+                日期
+            </th>
+            <th>
+                股票組合價值
+            </th>
+            <th>
+                股票組合價值(假設全部最高價)
+            </th>
+            <th>
+                股票組合價值(假設全部最低價)
+            </th>
+            <th>
+                可用現金
+            </th>
+            <th>
+                押金
+            </th>
+            <th>
+                總組合價值
+            </th>
+            <th>
+                恆生指數
+            </th>
+
+        </tr>
+
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.datetme)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.stk_val)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.stk_val_h)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.stk_val_l)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.freecash)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.margin)
+            </td>
+            <td>
+                @((item.freecash + item.stk_val).ToString("c"))
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HSI)
+            </td>
+
+
+        </tr>
+        }
+
+    </table>
+</div>
