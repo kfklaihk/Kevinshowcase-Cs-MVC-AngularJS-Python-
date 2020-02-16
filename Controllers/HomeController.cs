@@ -105,24 +105,7 @@ namespace WebApplication1.Controllers
                 load_success = false;
             }
 
-/*
-            if (load_success == true)
-            {
-                t_w_stklist = tx;
-                try
-                {
 
-                    tx = (t_query ).Include(p => p.Stklist).Include(u => u.Stklist.StkModels);
-
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                    tx =t_w_stklist;
-                    load_success = false;
-                }
-            }
-*/
             load_success = true;
 
             var pend_query = from x in db.Pending_txModels
@@ -141,49 +124,7 @@ namespace WebApplication1.Controllers
                 pending_tx = pend_query;
                 load_success = false;
             }
-            /*
-            if (load_success == true)
-            {
-                pend_w_stklist = pending_tx;
-                try
-                {
-
-                    pending_tx = (pend_query ).Include(p => p.Stklist);
-
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                    pending_tx = pend_w_stklist;
-                    load_success = false;
-                }
-            }
-            */
-
-
-            /*       var union_list = (from x1 in tx select  x1.Stklist).Union
-                        (from x1 in pending_tx select  x1.Stklist ).Union
-                   (from x1 in stkhldg select  x1.Stklist );
-
-
-
-                   var stklist = from x in db.StklistModels
-                                 where (from x1 in union_list select x1.StklistGUID).Contains(x.StklistGUID)
-                                 select x;
-
-
-
-                   var stk = from x in db.StkModels
-                             where x.datetme==datme &&  stklist.Contains(x.Stklist)
-                             select x;
-    */
-            /*   
-            var stklist = from x in db.StklistModels
-                          select x;
-
-            var stk = from x in db.StkModels
-                      select x;
-*/
+     
             ViewModel_1 mymodel = vmodel;
             mymodel.StkHoldingModels = stkhldg;
             mymodel.CashHoldingModels = cashhldg;
@@ -255,29 +196,7 @@ namespace WebApplication1.Controllers
             if (xchange == "HK")
             {
                 stkcode = stk_code.Replace(".HK","").PadLeft(5, '0');
-                /*      userRequest = @"{
-                       'url': 'http://www.etnet.com.hk/www/tc/stocks/realtime/quote_super.php?code=" + stkcode + @"',
-              'requestSettings': {
-                 'maxwait' : 50000
-              },
-              'renderType': 'plaintext',
-              'outputAsJson':false,
-             'scripts': {
-                          'domReady': [
-       'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js',
-
-                          '$(""#refresh"").click();',
-                          '_pjscMeta.manualWait=true;'
-
-
-      ],
-                          'loadFinished': [
-
-                          'setInterval(function(){ var txt=$(""#content.data"").first().text(); if(txt!=null){_pjscMeta.manualWait=false;} },200)'
-                          ]
-                       }
-                      }";
-                 */
+          
                 userRequest = @"{
                  'url': 'http://money18.on.cc/info/hk/liveinfo_quote_" + stkcode + @".html',
         'requestSettings': {
@@ -289,7 +208,7 @@ namespace WebApplication1.Controllers
 
 
 
-                URL = "http://api.phantomjscloud.com/api/browser/v2/ak-qqh6m-5qdy2-cmmmm-fvcfj-65ew1/";
+                URL = "http://api.phantomjscloud.com/api/browser/v2/ak-moh6m-5qdy2-cmmmm-fvcfj-65ew1/";
             }
             else if (xchange == "CN")
             {
@@ -315,7 +234,7 @@ namespace WebApplication1.Controllers
                     ]
                  }
 				}";
-                URL = "http://api.phantomjscloud.com/api/browser/v2/ak-qqh6m-5qdy2-cmmmm-fvcfj-65ew1/";
+                URL = "http://api.phantomjscloud.com/api/browser/v2/ak-moh6m-5qdy2-cmmmm-fvcfj-65ew1/";
             }
             else if (xchange == "US")
             {
@@ -328,7 +247,7 @@ namespace WebApplication1.Controllers
 		'renderType': 'plaintext',
 		'outputAsJson':false
        				}";
-                URL = "http://api.phantomjscloud.com/api/browser/v2/ak-qqh6m-5qdy2-cmmmm-fvcfj-65ew1/";
+                URL = "http://api.phantomjscloud.com/api/browser/v2/ak-moh6m-5qdy2-cmmmm-fvcfj-65ew1/";
 
             }
 
@@ -488,7 +407,7 @@ namespace WebApplication1.Controllers
         [Authorize]
         public ActionResult m6(string yr)
         {
-          //  M6_Model mymodel = new M6_Model();
+          
             var q = from x in db.M6_Models
                     where x.datetme.Substring(0,4)==yr
                     orderby x.datetme descending
@@ -513,7 +432,7 @@ namespace WebApplication1.Controllers
         public JsonResult initial_load_Ana()
         {
             
-          //  Analyst_Model ana_Model = new Analyst_Model();
+        
 
 
            
@@ -530,7 +449,7 @@ namespace WebApplication1.Controllers
         [Authorize]
         public JsonResult initial_load_Rec()
         {
-           // Recommend_Model rec_model = new Recommend_Model();
+           
             
 
 
@@ -689,40 +608,11 @@ namespace WebApplication1.Controllers
             Decimal exrate = Convert.ToDecimal(xrate);
             int num_shares = Convert.ToInt32(shares);
             int new_shares;
-            /*
-            try
-            {
-                //last_stk_price = db.StklistModels.Where(g => g.stkcode == stk_code && g.market == xchange && g.currency == curr).FirstOrDefault().StkModels.OrderByDescending(g => g.datetme).First().cprice;
-                last_stk_price = (from g in db.StklistModels
-                                  join a in db.StkModels.Include(p => p.Stklist) on g.StklistGUID equals a.Stklist.StklistGUID
-                                  where g.stkcode == stk_code && g.market == xchange && g.currency == curr
-                                  orderby a.datetme descending
-                                  select a.cprice).AsEnumerable().FirstOrDefault();
-            }
-            catch (Exception e)
-            {
-                last_stk_price = 0;
-            }
-
-            try
-            {
-                //last_xrate = db.StklistModels.Where(g => g.stkcode == stk_code && g.market == xchange && g.currency == curr).FirstOrDefault().StkModels.OrderByDescending(g => g.datetme).First().xrate;
-
-                last_xrate = (from g in db.StklistModels
-                              join a in db.StkModels.Include(p => p.Stklist) on g.StklistGUID equals a.Stklist.StklistGUID
-                              where g.stkcode == stk_code && g.market == xchange && g.currency == curr
-                              orderby a.datetme descending
-                              select a.xrate).AsEnumerable().FirstOrDefault();
-            }
-            catch (Exception e)
-            {
-                last_xrate = 0;
-            }
-            */
+          
 
             try
 			{
-                // stklist = db.StklistModels.Where(g => g.stkcode == stk_code && g.market == xchange && g.currency == curr).FirstOrDefault();
+              
                 stklist = (StklistModel)(from g in db.StklistModels
                                          where g.stkcode == stk_code && g.market == xchange && g.currency == curr
                                          select g).FirstOrDefault();
@@ -905,12 +795,7 @@ namespace WebApplication1.Controllers
 
                                                   }
 
-                   /*     if (stklist.StkModels == null)
-                        {
-
-                            stklist.StkModels = new List<StkModel>() { new StkModel() { stkcode = stk_code, name = stk_name, datetme = dt, cprice = stockprice, xrate = exrate } };
-                        }
-                  */      m = new txModel { datetme = dt, hrmmtme = DateTime.Now.ToString("HHmmss"), buysell = bs, shares = num_shares, price = stockprice, xrate = exrate, remark="Complete Order",User = curr_user, Stklist = stklist };
+                      m = new txModel { datetme = dt, hrmmtme = DateTime.Now.ToString("HHmmss"), buysell = bs, shares = num_shares, price = stockprice, xrate = exrate, remark="Complete Order",User = curr_user, Stklist = stklist };
                                                   db.txModels.Add(m);
                         if (s_new == true)
                         {
@@ -1048,8 +933,7 @@ namespace WebApplication1.Controllers
                                 new_shares = stkhldg.shares - num_shares;
                                 free_up_margin = Convert.ToInt32(stkhldg.shares * stockprice * exrate );
                                          cash = cash + free_up_margin;
-                               //     margin = margin - Convert.ToInt32(new_shares * stockprice * exrate / 2);
-
+                            
 
 
                                          if (cash >= -new_shares * stockprice * exrate/2)
@@ -1165,7 +1049,7 @@ namespace WebApplication1.Controllers
 
             try
             {
-                // stklist = db.StklistModels.Where(g => g.stkcode == stk_code && g.market == xchange && g.currency == curr).FirstOrDefault();
+                
                 stklist = (StklistModel)(from g in db.StklistModels
                                          where g.stkcode == stk_code && g.market == xchange && g.currency == curr
                                          select g).FirstOrDefault();
